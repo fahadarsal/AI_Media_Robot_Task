@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Toy Robot Simulator</title>
+    <style>
+      .board {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+        gap: 1px;
+        background-color: gray;
+        padding: 5px;
+      }
+
+      .cell {
+        background-color: white;
+        height: 50px;
+      }
+      .robot {
+        background-color: red;
+      }
+      button {
+        margin: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="board">
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+    </div>
+
+    <div>
+      <button id="place-button">PLACE</button>
+      <input type="text" id="place-input-x" placeholder="X" />
+      <input type="text" id="place-input-y" placeholder="Y" />
+      <select type="text" id="place-input-direction" placeholder="Direction">
+        <option>WEST</option>
+        <option>EAST</option>
+        <option>NORTH</option>
+        <option>SOUTH</option>
+      </select>
+      <button id="move-button">MOVE</button>
+      <button id="left-button">LEFT</button>
+      <button id="right-button">RIGHT</button>
+      <button id="report-button">REPORT</button>
+      <p id="console-output"></p>
+    </div>
+  </body>
+  <script>
+    var exports = {};
+    const log = console.log.bind(console);
+    console.log = (...args) => {
+      log(...args);
+      document.getElementById("console-output").innerHTML += "<br>" + args[0];
+    };
+  </script>
+  <script type="module">
+    import { Robot, Direction } from "./cli/Robot.js";
+
+    const board = document.querySelector(".board");
+    const cells = board.querySelectorAll(".cell");
+    const placeButton = document.querySelector("#place-button");
+    const placeInputX = () => document.querySelector("#place-input-x");
+    const placeInputY = () => document.querySelector("#place-input-y");
+    const placeInputDirection = () =>
+      document.querySelector("#place-input-direction");
+    const moveButton = document.querySelector("#move-button");
+    const leftButton = document.querySelector("#left-button");
+    const rightButton = document.querySelector("#right-button");
+    const reportButton = document.querySelector("#report-button");
+
+    const robot = new Robot();
+    robot.commandPlace(0, 0, "EAST");
+    robot.commandMove();
+    // console.log(robot);
+
+    function renderBoard() {
+      const cells = board.querySelectorAll(".cell");
+      cells.forEach((cell) => {
+        cell.classList.remove("robot");
+        cell.innerText = "";
+      });
+
+      const robotPosition = {
+        x: robot.currentPosition.x,
+        y: robot.currentPosition.y,
+        direction: robot.currentDirection,
+      };
+      if (robotPosition && robot.isPlaced()) {
+        const { x, y, direction } = robotPosition;
+        // console.log(robotPosition);
+        // console.log({ cells });
+        const cell = cells[Number(y) * 5 + Number(x)];
+        // console.log({ cell });
+        cell.classList.add("robot");
+        cell.innerText = direction.substr(0, 1);
+      }
+    }
+    renderBoard();
+
+    const placeAction = () => {
+      robot.commandPlace(
+        placeInputX().value,
+        placeInputY().value,
+        Direction[placeInputDirection().value]
+      );
+      console.log(robot.commandReport());
+      renderBoard();
+    };
+    placeButton.addEventListener("click", placeAction);
+
+    const moveAction = () => {
+      robot.commandMove();
+      console.log(robot.commandReport());
+      renderBoard();
+    };
+    moveButton.addEventListener("click", moveAction);
+
+    const LeftAction = () => {
+      robot.commandLeft();
+      console.log(robot.commandReport());
+      renderBoard();
+    };
+    leftButton.addEventListener("click", LeftAction);
+
+    const RightAction = () => {
+      robot.commandRight();
+      console.log(robot.commandReport());
+      renderBoard();
+    };
+    rightButton.addEventListener("click", RightAction);
+
+    const ReportAction = () => {
+      robot.commandReport();
+      console.log(robot.commandReport());
+      renderBoard();
+    };
+    reportButton.addEventListener("click", ReportAction);
+  </script>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "ai_media_robot_task",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "run-cli": "tsc ./cli/main.ts --lib 'es2017','dom' --outDir build; node ./build/main.js",
+    "run-tests": "tsc ./cli/tests.ts --lib 'es2017','dom' --outDir build; node ./build/tests.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^18.15.11"
+  }
+}
