@@ -1,5 +1,7 @@
 # AI MEDIA TOY ROBOT TASK
 
+![UI SCREENSHOT](ROBOT_TASK_SCREENSHOT.png)
+
 ### INSTALLATION
 
 To prevent any issues with running this application you should run npm install
